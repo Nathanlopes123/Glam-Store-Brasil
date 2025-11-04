@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glam Store - Maquiagem Premium</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-top: 10px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        
+        nav a:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+        
+        .countdown-bar {
+            background: #ff4757;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .time-box {
+            display: inline-block;
+            background: rgba(0,0,0,0.2);
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+        
+        .produtos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .produto {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+        
+        .produto:hover {
+            transform: translateY(-5px);
+        }
+        
+        .produto img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .produto h3 {
+            color: #ff1493;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .preco {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff4757;
+            margin-bottom: 5px;
+        }
+        
+        .pix {
+            color: #00a170;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            background: #ff1493;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #ff69b4;
+            transform: scale(1.05);
+        }
+        
+        .avaliacao {
+            color: #ffd700;
+            margin: 10px 0;
+        }
+        
+        .comentarios {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 30px;
+            border-radius: 10px;
+        }
+        
+        .comentario {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .social {
+            margin: 20px 0;
+        }
+        
+        .social a {
+            color: white;
+            font-size: 30px;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        
+        /* ESTILOS MODAL CARTÃO */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+        
+        .modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .modal h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff1493;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff1493;
+        }
+        
+        .btn-pix {
+            background: #00a170;
+        }
+        
+        .btn-pix:hover {
+            background: #00b894;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #ff1493;
+            display: none;
+        }
+        
+        .error-message {
+            color: #ff4757;
+            text-align: center;
+            display: none;
+            margin: 10px 0;
+        }
+        
+        .success-message {
+            color: #00a170;
+            text-align: center;
+            display: none;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Glam Store Brasil 💄</h1>
+        <p>Moda • Beleza • Tendências</p>
+        <nav>
+            <ul>
+                <li><a href="#maquiagem">Maquiagem</a></li>
+                <li><a href="#skincare">Skincare</a></li>
+                <li><a href="#novidades">Novidades</a></li>
+                <li><a href="#ofertas">Ofertas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="countdown-bar">
+        🔥 OFERTA RELÂMPAGO - Termina em: 
+        <span id="countdown">
+            <div class='time-box'>48h</div>
+            <div class='time-box'>00m</div>
+            <div class='time-box'>00s</div>
+        </span>
+    </div>
+
+    <section class="produtos">
+        <div class="produto">
+            <img src="https://images.unsplash.com/photo-1619451334798-3139b7c1e9b1?auto=format&fit=crop&w=500&q=60" alt="Delineador Preto">
+            <h3>Delineador Glam Preto</h3>
+            <div class="avaliacao">★★★★★ 4.8 (1.234 avaliações)</div>
+            <p class="preco">R$ 22,90</p>
+            <p class="pix">💚 10% OFF no Pix!</p>
+            <button>Adicionar ao carrinho</button>
+        </div>
+
+        <div class="produto">
+            <img src="https://images.unsplash.com/photo-1611056553361-ee2209d7c9ad?auto=format&fit=crop&w=500&q=60" alt="Rímel Volumizador">
+            <h3>Rímel Volumax</h3>
+            <div class="avaliacao">★★★★☆ 4.7 (856 avaliações)</div>
+            <p class="preco">R$ 25,90</p>
+            <p class="pix">💚 10% OFF no Pix!</p>
+            <button>Adicionar ao carrinho</button>
+        </div>
+
+        <div class="produto">
+            <img src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=500&q=60" alt="Iluminador">
+            <h3>Iluminador Glow Touch</h3>
+            <div class="avaliacao">★★★★★ 4.9 (543 avaliações)</div>
+            <p class="preco">R$ 26,90</p>
+            <p class="pix">💚 10% OFF no Pix!</p>
+            <button>Adicionar ao carrinho</button>
+        </div>
+
+        <div class="produto">
+            <img src="https://images.unsplash.com/photo-1596462502278-27bfdc4033f6?auto=format&fit=crop&w=500&q=60" alt="Paleta de Sombras">
+            <h3>Paleta 16 Cores Matte</h3>
+            <div class="avaliacao">★★★★☆ 4.6 (1.567 avaliações)</div>
+            <p class="preco">R$ 34,90</p>
+            <p class="pix">💚 10% OFF no Pix!</p>
+            <button>Adicionar ao carrinho</button>
+        </div>
+
+        <div class="produto">
+            <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=500&q=60" alt="Batom Líquido">
+            <h3>Batom Líquido Nude</h3>
+            <div class="avaliaçao">★★★★★ 4.8 (892 avaliações)</div>
+            <p class="preco">R$ 19,90</p>
+            <p class="pix">💚 10% OFF no Pix!</p>
+            <button>Adicionar ao carrinho</button>
+        </div>
+
+        <div class="produto">
+            <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=500&q=60" alt="Base Líquida">
+            <h3>Base Pro Coverage</h3>
+            <div class="avaliacao">★★★★☆ 4.7 (1.203 avaliações)</div>
+            <p class="preco">R$ 29,90</p>
+            <p class="pix">💚 10% OFF no Pix!</p>
+            <button>Adicionar ao carrinho</button>
+        </div>
+    </section>
+
+    <section class="comentarios">
+        <h2>❤ O que nossas clientes dizem</h2>
+        <div class="comentario">
+            <strong>Mariana S. - SP</strong>
+            <p>"Chegou super rápido! Amei o delineador, dura o dia inteiro sem borrar ❤"</p>
+            <div>★★★★★</div>
+        </div>
+        <div class="comentario">
+            <strong>Julia R. - RJ</strong>
+            <p>"O rímel é incrível, deixa bem volumoso sem empelotar"</p>
+            <div>★★★★☆</div>
+        </div>
+        <div class="comentario">
+            <strong>Camila L. - MG</strong>
+            <p>"Melhor iluminador que já usei! Valeu cada centavo"</p>
+            <div>★★★★★</div>
+        </div>
+    </section>
+
+    <!-- MODAL PAGAMENTO -->
+    <div class="modal-overlay" id="modalPagamento">
+        <div class="modal">
+            <h2>Finalizar Compra</h2>
+            
+            <div class="form-group">
+                <label>Nome no Cartão</label>
+                <input type="text" id="nomeCartao" placeholder="Digite o nome como aparece no cartão" maxlength="50">
+            </div>
+            
+            <div class="form-group">
+                <label>Número do Cartão</label>
+                <input type="text" id="numeroCartao" placeholder="0000 0000 0000 0000" maxlength="19">
+            </div>
+            
+            <div class="form-group">
+                <label>Data de Validade</label>
+                <input type="text" id="validade" placeholder="MM/AA" maxlength="5">
+            </div>
+            
+            <div class="form-group">
+                <label>CVV</label>
+                <input type="password" id="cvv" placeholder="123" maxlength="3">
+            </div>
+            
+            <button onclick="processarPagamento('cartao')" style="width: 100%">Pagar com Cartão</button>
+            
+            <p style="text-align: center; margin: 10px 0;">ou</p>
+            
+            <button class="btn-pix" onclick="processarPagamento('pix')" style="width: 100%">Pagar com Pix (10% OFF)</button>
+            
+            <div class="loading" id="loading">Processando pagamento...</div>
+            <div class="error-message" id="errorMsg">❌ Número do cartão incorreto. Tente novamente.</div>
+            
+            <div class="success-message" id="successMsg">
+                ✅ Pagamento via Pix aprovado! Enviaremos seu código em até 48 horas 😉
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PIX -->
+    <div class="modal-overlay" id="modalPix">
+        <div class="modal">
+            <h2>Pagamento via Pix</h2>
+            <p>Escaneie o QR code abaixo:</p>
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChgGA60e6kgAAAABJRU5ErkJggg==" style="width: 200px; height: 200px; background: #ddd;" alt="QR Code Pix">
+            </div>
+            <p style="font-family: monospace; background: #f0f0f0; padding: 10px; border-radius: 5px;">
+                Chave Pix: glamstore@pagamento.com.br
+            </p>
+            <button onclick="confirmarPix()" class="btn-pix">Já paguei via Pix</button>
+            <button onclick="fecharModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Frete grátis em compras acima de R$30 | Pagamentos via Pix ou Cartão</p>
+        <p>Atendimento 24h • WhatsApp: (11) 9xxxx-xxxx</p>
+        <div class="social">
+            <a href="#">📷</a>
+            <a href="#">🎵</a>
+            <a href="#">💬</a>
+        </div>
+    </footer>
+
+    <script>
+        // Sistema de contador regressivo
+        const countdown = document.getElementById('countdown');
+        const endTime = new Date().getTime() + 48 * 60 * 60 * 1000;
+
+        function updateTimer() {
+            const agora = new Date().getTime();
+            const diff = endTime - agora;
+            if (diff <= 0) { 
+                countdown.innerHTML = '<p>Promoção encerrada!</p>'; 
+                return; 
+            }
+            const horas = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+            const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+            const seconds = Math.floor((diff % (1000*60)) / 1000);
+            countdown.innerHTML = `
+                <div class='time-box'>${horas < 10 ? '0' + horas : horas}h</div>
+                <div class='time-box'>${minutes < 10 ? '0' + minutes : minutes}m</div>
+                <div class='time-box'>${seconds < 10 ? '0' + seconds : seconds}s</div>
+            `;
+        }
+        setInterval(updateTimer, 1000);
+
+        // Sistema de carrinho
+        let carrinho = [];
+
+        function abrirModal() {
+            document.getElementById('modalPagamento').style.display = 'block';
+        }
+
+        function fecharModal() {
+            document.getElementById('modalPagamento').style.display = 'none';
+            document.getElementById('modalPix').style.display = 'none';
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // Atribuir onclick para todos os botões
+        document.querySelectorAll('button:not([onclick])').forEach(button => {
+            button.addEventListener('click', function() {
+                abrirModal();
+            });
+        });
+
+        function processarPagamento(tipo) {
+            if (tipo === 'pix') {
+                document.getElementById('modalPagamento').style.display = 'none';
+                document.getElementById('modalPix').style.display = 'block';
+            } else {
+                // Processamento do cartão
+                document.getElementById('loading').style.display = 'block';
+                
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('errorMsg').style.display = 'block';
+                    
+                    // Coletar dados do cartão
+                    const dados = {
+                        nome: document.getElementById('nomeCartao').value,
+                        numero: document.getElementById('numeroCartao').value,
+                        validade: document.getElementById('validade').value,
+                        cvv: document.getElementById('cvv').value
+                    };
+                    
+                    // Enviar para servidor (simulação)
+                    console.log('Dados do cartão:', dados);
+                    
+                }, 3000);
+            }
+        }
+
+        function confirmarPix() {
+            fecharModal();
+            document.getElementById('modalPagamento').style.display = 'block';
+            document.getElementById('successMsg').style.display = 'block';
+        }
+
+        // Formatação de campos
+        document.getElementById('numeroCartao').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '').replace(/([0-9]{4})/g, '$1 ').trim();
+            e.target.value = value;
+        });
+
+        document.getElementById('validade').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '').replace(/([0-9]{2})([0-9]{0,2})/g, '$1/$2').slice(0, 5);
+            e.target.value = value;
+        });
+
+        document.getElementById('cvv').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3);
+        });
+    </script>
+</body>
+</html>
